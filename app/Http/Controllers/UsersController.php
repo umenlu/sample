@@ -52,11 +52,6 @@ class UsersController extends Controller
         return view('users.create');
     }
 
-    public function show(User $user)
-    {
-        return view('users.show', compact('user'));
-    }
-
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -86,6 +81,14 @@ class UsersController extends Controller
         Mail::send($view, $data, function ($message) use ($to, $subject) {
             $message->to($to)->subject($subject);
         });
+    }
+
+    public function show(User $user)
+    {
+        $statuses = $user->statuses()
+                           ->orderBy('created_at', 'desc')
+                           ->paginate(30);
+        return view('users.show', compact('user', 'statuses'));
     }
 
     public function edit(User $user)

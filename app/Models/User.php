@@ -22,6 +22,12 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+    public function feed()
+    {
+        return $this->statuses()
+                    ->orderBy('created_at', 'desc');
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -30,6 +36,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
 
     public function sendPasswordResetNotification($token)
     {
